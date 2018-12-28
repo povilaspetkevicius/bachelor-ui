@@ -16,9 +16,9 @@ const QUERY_MOCK: Queries[] = [
 })
 
 export class QueriesComponent implements OnInit {
-
+  displayedColumns: string[] = ["id", "flights", "dateFrom", "dateTo", "stateOfFlight", "user"];
+  queryArray: Queries[] = QUERY_MOCK;
   constructor() { }
-
   ngOnInit() {
   }
 
