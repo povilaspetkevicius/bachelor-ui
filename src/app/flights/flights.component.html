@@ -1,0 +1,20 @@
+<table mat-table [dataSource]="flightArray" class="mat-elevation-z8">
+  <ng-container matColumnDef="airline">
+    <th mat-header-cell *matHeaderCellDef> Airline </th>
+    <td mat-cell *matCellDef="let element">{{ element.airline }}</td>
+  </ng-container>
+  <ng-container matColumnDef="flightNumber">
+    <th mat-header-cell *matHeaderCellDef> Flight No. </th>
+    <td mat-cell *matCellDef="let element">{{ element.flightNumber }}</td>
+  </ng-container>
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef> Date </th>
+    <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+  </ng-container>
+  <ng-container matColumnDef="passengers">
+    <th mat-header-cell *matHeaderCellDef> Passenger No. </th>
+    <td mat-cell *matCellDef="let element">{{ element.passengers }}</td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

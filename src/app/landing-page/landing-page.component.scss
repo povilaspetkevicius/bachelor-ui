@@ -1,0 +1,10 @@
+.container {
+    margin: 8px;
+    &.head{
+        padding-left: 50px;
+        color: #000033;
+    }
+    &.body{
+        color: #00001a;
+    }
+}
