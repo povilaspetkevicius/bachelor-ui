@@ -1,6 +1,9 @@
 export interface Flight {
-    airline: string;
-    flightNumber: string;
-    date: number;
-    passengers: number;
+    _id: String;
+    flightNumber: String;
+    date: String;
+    airport: String;
+    expectedTime: String;
+    scheduleTime: String;
+    status: String;
 }

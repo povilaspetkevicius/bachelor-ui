@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Flight } from '../flights/flight-data';
 
 
 
@@ -16,16 +18,16 @@ export class BackendApiService {
   };
   constructor(private http: HttpClient) {
   }
-  getFlightNumbers() {
-    return this.http.get(`${this.uri}/flight`);
+  getFlightNumbers(): Observable<String[]> {
+    return this.http.get<String[]>(`${this.uri}/flight`);
   }
   getAirports() {
-    return this.http.get(`${this.uri}/airport`);
+    return this.http.get<String[]>(`${this.uri}/airport`);
   }
-  getFlightStatus(flightNumber: String){
+  getFlightStatus(flightNumber: String): Observable<any> {
     return this.http.get(`${this.uri}/flight/` + flightNumber + '/status');
   }
-  getFlightRecords(flightNumber: String){
+  getFlightRecords(flightNumber: String): Observable<any>{
     return this.http.get(`${this.uri}/flight/` + flightNumber + '/records');
   }
   getFlightStatistics(flightNumber: String){
@@ -37,8 +39,8 @@ export class BackendApiService {
   getAirportFlights(iata: String) {
     return this.http.get(`${this.uri}/airport/` + iata + '/flight');
   }
-  getAirportStatus(iata: String) {
-    return this.http.get(`${this.uri}/airport/` + iata + '/status');
+  getAirportStatus(iata: String): Observable<String[]> {
+    return this.http.get<String[]>(`${this.uri}/airport/` + iata + '/status');
   }
   getAirportStatistics(iata: String){
     return this.http.get(`${this.uri}/airport/` + iata + '/stats');

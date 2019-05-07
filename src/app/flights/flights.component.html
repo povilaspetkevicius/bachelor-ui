@@ -1,20 +1,69 @@
-<table mat-table [dataSource]="flightArray" class="mat-elevation-z8">
-  <ng-container matColumnDef="airline">
-    <th mat-header-cell *matHeaderCellDef> Airline </th>
-    <td mat-cell *matCellDef="let element">{{ element.airline }}</td>
-  </ng-container>
-  <ng-container matColumnDef="flightNumber">
-    <th mat-header-cell *matHeaderCellDef> Flight No. </th>
-    <td mat-cell *matCellDef="let element">{{ element.flightNumber }}</td>
-  </ng-container>
-  <ng-container matColumnDef="date">
-    <th mat-header-cell *matHeaderCellDef> Date </th>
-    <td mat-cell *matCellDef="let element">{{ element.date }}</td>
-  </ng-container>
-  <ng-container matColumnDef="passengers">
-    <th mat-header-cell *matHeaderCellDef> Passenger No. </th>
-    <td mat-cell *matCellDef="let element">{{ element.passengers }}</td>
-  </ng-container>
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+<h2>Select airport or flight</h2>
+<div>
+  <mat-form-field>
+    <mat-label>Airport</mat-label>
+    <mat-select [(value)]='selectedUnit'>
+      <mat-option *ngFor="let airport of airports" value='{{ airport }}'>
+        {{ airport }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Flight number</mat-label>
+    <mat-select [(value)]='selectedUnit'>
+      <mat-option *ngFor="let flight of flightNumbers" value='{{ flight }}'>
+        {{ flight }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<h2 *ngIf="selectedUnit">selected: {{ selectedUnit }}</h2>
+<button mat-raised-button (click)="retrieveDataBasedOnSelectedItem()" *ngIf="selectedUnit" color="primary">Find
+  data</button>
+<div id="analysis" *ngIf="dataFound">
+
+
+  <!-- <table id='flight-records' mat-table [dataSource]="flights" class="mat-elevation-z8">
+    <ng-container matColumnDef="flightNumber">
+      <th mat-header-cell *matHeaderCellDef> Flight number </th>
+      <td mat-cell *matCellDef="let element">{{ element.flightNumber }}</td>
+    </ng-container>
+    <ng-container matColumnDef="airline">
+      <th mat-header-cell *matHeaderCellDef> Airline </th>
+      <td mat-cell *matCellDef="let element">{{ element.airline }}</td>
+    </ng-container>
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef> Date </th>
+      <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+    </ng-container>
+    <ng-container matColumnDef="scheduledTime">
+      <th mat-header-cell *matHeaderCellDef> Scheduled time </th>
+      <td mat-cell *matCellDef="let element">{{ element.scheduledTime }}</td>
+    </ng-container>
+    <ng-container matColumnDef="expectedTime">
+      <th mat-header-cell *matHeaderCellDef> Expected time </th>
+      <td mat-cell *matCellDef="let element">{{ element.expectedTime }}</td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table> -->
+  <table>
+    <tr>
+      <th *ngFor="let header of displayedColumns">
+        <tr>{{ header }}</tr>
+      </th>
+    </tr>
+      <tr *ngFor="let flight of flights">
+          <td>{{flight.flightNumber}}</td>
+          <td>{{flight.airport}}</td>
+          <td>{{flight.date}}</td>
+          <td>{{flight.scheduleTime}}</td>
+          <td>{{flight.expectedTime}}</td>
+          <td>{{flight.status}}</td>
+      </tr>
+  </table>
+</div>

@@ -9,7 +9,9 @@ import {MatTableModule} from '@angular/material/table';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
+import {MatSelectModule} from '@angular/material/select';
 import {BackendApiService} from './service/backend-api.service';
+import {MatButtonModule} from '@angular/material/button';
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,6 +26,8 @@ import {BackendApiService} from './service/backend-api.service';
     MatTableModule,
     MatDividerModule,
     MatListModule,
+    MatSelectModule,
+    MatButtonModule
   ],
   providers: [BackendApiService],
   bootstrap: [AppComponent]
