@@ -12,6 +12,8 @@ import {MatListModule} from '@angular/material/list';
 import {MatSelectModule} from '@angular/material/select';
 import {BackendApiService} from './service/backend-api.service';
 import {MatButtonModule} from '@angular/material/button';
+import { MatPaginatorModule } from '@angular/material';
+import { MatSortModule } from '@angular/material/sort';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +29,9 @@ import {MatButtonModule} from '@angular/material/button';
     MatDividerModule,
     MatListModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [BackendApiService],
   bootstrap: [AppComponent]

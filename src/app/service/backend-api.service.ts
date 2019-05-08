@@ -24,6 +24,9 @@ export class BackendApiService {
   getAirports() {
     return this.http.get<String[]>(`${this.uri}/airport`);
   }
+  getDates() {
+    return this.http.get<String[]>(`${this.uri}/util/date`);
+  }
   getFlightStatus(flightNumber: String): Observable<any> {
     return this.http.get(`${this.uri}/flight/` + flightNumber + '/status');
   }
@@ -37,7 +40,7 @@ export class BackendApiService {
     return this.http.get(`${this.uri}/flight/` + flightNumber + '/' + date + '/stats');
   }
   getAirportFlights(iata: String) {
-    return this.http.get(`${this.uri}/airport/` + iata + '/flight');
+    return this.http.get<String[]>(`${this.uri}/airport/` + iata + '/flight');
   }
   getAirportStatus(iata: String): Observable<String[]> {
     return this.http.get<String[]>(`${this.uri}/airport/` + iata + '/status');
