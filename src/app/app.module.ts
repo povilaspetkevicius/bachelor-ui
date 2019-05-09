@@ -14,11 +14,15 @@ import {BackendApiService} from './service/backend-api.service';
 import {MatButtonModule} from '@angular/material/button';
 import { MatPaginatorModule } from '@angular/material';
 import { MatSortModule } from '@angular/material/sort';
+import { ChartsModule } from 'ng2-charts';
+import { FlightsPairComponent } from './flights/flights-pair/flights-pair.component';
+import {MatGridListModule} from '@angular/material/grid-list';
 @NgModule({
   declarations: [
     AppComponent,
     FlightsComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    FlightsPairComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +35,9 @@ import { MatSortModule } from '@angular/material/sort';
     MatSelectModule,
     MatButtonModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    ChartsModule,
+    MatGridListModule
   ],
   providers: [BackendApiService],
   bootstrap: [AppComponent]

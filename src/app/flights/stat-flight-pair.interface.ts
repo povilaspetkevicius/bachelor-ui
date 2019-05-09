@@ -1,6 +1,6 @@
 export interface FlightPair {
-    correlation: number,
-    covariation: number,
-    flight1: String,
-    flight2: String
+    correlationOfFlightDisruptions: number,
+    covarianceOfFlightDisruptions: number,
+    flightNumber1: String,
+    flightNumber2: String
 }

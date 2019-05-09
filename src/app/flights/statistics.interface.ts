@@ -5,6 +5,8 @@ export interface FlightStatistics {
     disruptionStdDeviation: number,
     numberOfDisruptedFlights: number,
     numberOfFlights: number,
+    numberOfDisruptedFlightsOnDate: number,
+    numberOfFlightsOnDate: number,
     linkedFlights: FlightPair[]
 }
 
