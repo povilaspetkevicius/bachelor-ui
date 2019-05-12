@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, OnChanges, SimpleChanges } from '@angular/core';
 import { MatPaginator, MatTableDataSource, Sort } from '@angular/material';
 import { Flight } from './flight-data';
 import { BackendApiService } from '../service/backend-api.service'
@@ -7,7 +7,6 @@ import * as _ from 'underscore';
 import { FlightStatistics, AirportStatistics } from './statistics.interface';
 import { ChartType, ChartOptions } from 'chart.js';
 import { Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
-import randomColor from 'randomcolor';
 
 @Component({
   selector: 'flights',
@@ -15,6 +14,7 @@ import randomColor from 'randomcolor';
   styleUrls: ['./flights.component.scss']
 })
 export class FlightsComponent implements OnInit, AfterViewInit {
+
   dataSource: MatTableDataSource<Flight>;
   displayedColumns: string[] = ["flightNumber", "airline", "date", "scheduledTime", "expectedTime", "status"];
   displayedStatisticColumns: string[] = ["unit", "value"];
@@ -25,10 +25,12 @@ export class FlightsComponent implements OnInit, AfterViewInit {
   flightNumbers: String[];
   airports: String[];
   simpleStats: any[];
-  selectedUnit: String;
+  selectedAirport: String;
+  selectedFlight: String;
   selectedDate: String;
   dataFound: boolean;
   dates: String[];
+  isDisplayLinkedFlights = this.flightStatistics && this.flightStatistics.linkedFlights && this.flightStatistics.linkedFlights.length > 0;
   statusChartColors: any[] = [
     {
       backgroundColor: ["#FF7360", "#6FC8CE", "#FAFFF2", "#FFFCC4", "#B9E8E0", '#d13537', '#b0o0b5', '#coffee', '#blue', "#fff"]
@@ -58,6 +60,9 @@ export class FlightsComponent implements OnInit, AfterViewInit {
     this.attachPaginator();
   }
 
+  checkForChanges(): void {
+    this._apiService.getAirportFlights(this.selectedAirport).subscribe(res => { this.flightNumbers = res });
+  }
   attachPaginator() {
     if (this.flights.length === 0) {
       setTimeout(() => {
@@ -73,9 +78,9 @@ export class FlightsComponent implements OnInit, AfterViewInit {
     this.getAirports();
     this.getDates();
     this.dataFound = false;
-    this.selectedUnit = null;
+    this.selectedAirport = null;
+    this.selectedFlight = null;
     this.selectedDate = null;
-
   }
   getFlights(): void {
     this._apiService.getFlightNumbers()
@@ -91,34 +96,37 @@ export class FlightsComponent implements OnInit, AfterViewInit {
     this._apiService.getDates()
       .subscribe(res => this.dates = res);
   }
-  isFlight(): boolean {
-    if (this.airports.indexOf(this.selectedUnit) > -1 && this.airports.indexOf(this.selectedUnit) > -1) {
-      return false
-    } else return true;
-  }
+
   retrieveDataBasedOnSelectedItem(): void {
     this.dataFound = false;
     if (this.flights.length > 0) this.flights = [];
+    // if (this.simpleStats && this.simpleStats.length > 0) this.simpleStats = [];
     let date = this.selectedDate ? this.selectedDate : new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    if (this.selectedUnit) {
-      if (this.flightNumbers.indexOf(this.selectedUnit) > -1) {
-        this._apiService.getFlightRecords(this.selectedUnit).subscribe(val => {
+    if (this.selectedFlight || this.selectedAirport) {
+      if (this.selectedFlight) {
+        this._apiService.getFlightRecords(this.selectedFlight).subscribe(val => {
           this.parseFlightRecords(val);
         });
-        this._apiService.getFlightStatus(this.selectedUnit).subscribe(val => {
+        this._apiService.getFlightStatus(this.selectedFlight).subscribe(val => {
           this.createDataForStatusChart(val);
         });
-        this._apiService.getFlightStatistics(this.selectedUnit).subscribe(val => { this.flightStatistics = this.parseFlightStatistics(val); console.log(this.flightStatistics) });
-        this._apiService.getFlightStatisticsOnDay(this.selectedUnit, date).subscribe(val => this.flightStatistics = this.parseFlightStatistics(val));
+        this._apiService.getFlightStatistics(this.selectedFlight).subscribe(val => {
+          this.flightStatistics = this.parseFlightStatistics(val);
+        });
+        this._apiService.getFlightStatisticsOnDay(this.selectedFlight, date).subscribe(val =>
+          this.flightStatistics = this.parseFlightStatistics(val)
+        );
         this.dataFound = true;
       }
-      if (this.airports.indexOf(this.selectedUnit) > -1) {
-        this._apiService.getAirportStatus(this.selectedUnit).subscribe(val => {
+      if (this.selectedAirport && !this.selectedFlight) {
+        this._apiService.getAirportStatus(this.selectedAirport).subscribe(val => {
           this.createDataForStatusChart(val);
         });
-        this._apiService.getAirportFlights(this.selectedUnit).subscribe(val => this.flightNumbers = val);
-        this._apiService.getAirportStatistics(this.selectedUnit).subscribe(val => this.airportStatistics = this.parseAirportStatistics(val));
-        this._apiService.getAirportStatisticsOnDate(this.selectedUnit, new Date().toISOString().slice(0, 10).replace(/-/g, '')).subscribe(val => this.airportStatistics = this.parseAirportStatistics(val));
+        this._apiService.getAirportFlights(this.selectedAirport).subscribe(val => this.flightNumbers = val);
+        this._apiService.getAirportStatistics(this.selectedAirport).subscribe(val =>
+          this.airportStatistics = this.parseAirportStatistics(val)
+        );
+        this._apiService.getAirportStatisticsOnDate(this.selectedAirport, new Date().toISOString().slice(0, 10).replace(/-/g, '')).subscribe(val => this.airportStatistics = this.parseAirportStatistics(val));
         this.dataFound = true;
       }
     } else {
@@ -168,13 +176,14 @@ export class FlightsComponent implements OnInit, AfterViewInit {
   }
 
   parseFlightStatistics(stats: any): FlightStatistics {
+    console.log(this.simpleStats);
     this.simpleStats = [
-      { unit: "Average of records for disruption-indicating statuses to all statuses per day (%)", value: stats.disruptionAvg },
-      { unit: "Standart deviation for disruption-indicating statuses to all statuses during days recorded (%)", value: stats.disruptionStdDeviation }
+      { unit: "Average of records for disruption-indicating statuses to all statuses per day (%) for selected flight", value: stats.disruptionAvg },
+      { unit: "Standart deviation for disruption-indicating statuses to all statuses during days recorded (%) for selected flight", value: stats.disruptionStdDeviation }
     ];
     if (this.selectedDate && this.selectedDate.length > 0) {
-      this.simpleStats.push({ unit: "Average of records for disruption-indicating statuses to all statuses per selected day (%)", value: stats.disruptionAvg });
-      this.simpleStats.push({ unit: "Standart deviation for disruption-indicating statuses to all statuses during selected day(%)", value: stats.disruptionStdDeviation });
+      this.simpleStats.push({ unit: "Average of records for disruption-indicating statuses to all statuses per selected day (%) selected flight", value: stats.disruptionAvg });
+      this.simpleStats.push({ unit: "Standart deviation for disruption-indicating statuses to all statuses during selected day(%) selected flight", value: stats.disruptionStdDeviation });
     }
     return {
       disruptionAvg: stats.disruptionAvg,
@@ -187,16 +196,18 @@ export class FlightsComponent implements OnInit, AfterViewInit {
     } as FlightStatistics;
   }
   parseAirportStatistics(stats: any): AirportStatistics {
+    console.log(this.simpleStats);
     this.simpleStats = [
-      { unit: "Average of records for disruption-indicating statuses to all statuses per day (%)", value: stats.airportMean },
-      { unit: "Standart deviation for disruption-indicating statuses to all statuses during days recorded (%)", value: stats.airportStandartDeviation }
+      { unit: "Average of records for disruption-indicating statuses to all statuses per day (%) for selected airport", value: stats.airportMean * 100 },
+      { unit: "Standart deviation for disruption-indicating statuses to all statuses during days recorded (%) for selected airport", value: stats.airportStandartDeviation * 100 }
     ];
     if (this.selectedDate && this.selectedDate.length > 0) {
-      this.simpleStats.push({ unit: "Average of records for disruption-indicating statuses to all statuses per selected day (%)", value: stats.airportByDate });
+      this.simpleStats.push({ unit: "Average of records for disruption-indicating statuses to all statuses per selected day (%) for selected airport", value: stats.airportByDate * 100 });
     }
+    console.log('after',this.simpleStats);
     return {
-      disruptionAvg: stats.airportMean,
-      disruptionStdDeviation: stats.airportStandartDeviation,
+      disruptionAvg: stats.airportMean * 100,
+      disruptionStdDeviation: stats.airportStandartDeviation * 100,
       numberOfDisruptedFlights: stats.numberOfDisruptedFlightsOnRecords,
       numberOfFlights: stats.numberOfFlightsonRecord,
       grouped_statistics: {

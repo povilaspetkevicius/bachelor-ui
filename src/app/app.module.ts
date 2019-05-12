@@ -17,12 +17,17 @@ import { MatSortModule } from '@angular/material/sort';
 import { ChartsModule } from 'ng2-charts';
 import { FlightsPairComponent } from './flights/flights-pair/flights-pair.component';
 import {MatGridListModule} from '@angular/material/grid-list';
+import { HelpPageComponent } from './help-page/help-page.component';
+import { FlightsInfoComponent } from './flights/flights-info/flights-info.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 @NgModule({
   declarations: [
     AppComponent,
     FlightsComponent,
     LandingPageComponent,
-    FlightsPairComponent
+    FlightsPairComponent,
+    HelpPageComponent,
+    FlightsInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +42,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     MatPaginatorModule,
     MatSortModule,
     ChartsModule,
-    MatGridListModule
+    MatGridListModule,
+    MatProgressSpinnerModule
   ],
   providers: [BackendApiService],
   bootstrap: [AppComponent]

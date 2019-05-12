@@ -3,13 +3,29 @@ table {
     min-width: 240px;
     height: 100%;
 }
-mat-form-field {
+.mat-form-field {
     padding: 4px
 }
-mat-grid-tile {
+.mat-grid-tile {
     width: auto;
     height: auto;
 }
 .mat-elevation-z8 {
     padding: 10px;
+}
+#flight-pick{
+    width: 13rem;
+}
+status-chart-head {
+    text-align: center;
+}
+button {
+    margin:4px
+}
+flights-pair {
+    flex: auto; 
+    padding: 2.25rem;
+}
+.app-charts-list .mat-list-item {
+    height: 15rem;
 }

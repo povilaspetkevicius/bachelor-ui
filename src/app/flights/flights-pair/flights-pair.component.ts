@@ -16,7 +16,6 @@ export class FlightsPairComponent implements OnInit, OnChanges {
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
   public barChartPlugins = [];
-
   public barChartData: ChartDataSets[] = [];
   @Input() flightPairs: FlightPair[];
   constructor() { }
@@ -24,7 +23,6 @@ export class FlightsPairComponent implements OnInit, OnChanges {
   ngOnInit() {
   }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('hello from ngOnChanges',this.flightPairs);
     this.remapData();
   }
 

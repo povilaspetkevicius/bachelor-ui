@@ -1,0 +1,22 @@
+<mat-spinner *ngIf="spinner"></mat-spinner>
+<mat-list *ngIf="selectedFlightInfo && !spinner">
+  <mat-divider></mat-divider>
+  <mat-list-item>
+    <h4 mat-line>Flight Number</h4>
+    <p mat-line>{{selectedFlightInfo.flightNumber}}</p>
+  </mat-list-item>
+
+  <mat-list-item>
+    <h4 mat-line>Arrives from</h4>
+    <p mat-line>{{selectedFlightInfo.arrival}} {{selectedFlightInfo.arrivalIATA}}</p>
+  </mat-list-item>
+  <mat-list-item>
+    <h4 mat-line>Departs to</h4>
+    <p mat-line>{{selectedFlightInfo.departure}} {{selectedFlightInfo.departureIATA}}</p>
+  </mat-list-item>
+  <mat-list-item>
+    <h4 mat-line>Operated by airline</h4>
+    <p mat-line>{{selectedFlightInfo.airline}}</p>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+</mat-list>

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Flight } from '../flights/flight-data';
+import { FlightInfo } from '../flights/flights-info/flight-info.interface';
 
 
 
@@ -38,6 +39,9 @@ export class BackendApiService {
   }
   getFlightStatisticsOnDay(flightNumber: String, date: String){
     return this.http.get(`${this.uri}/flight/` + flightNumber + '/' + date + '/stats');
+  }
+  getFlightsInformation(){
+    return this.http.get<FlightInfo[]>(`${this.uri}` + '/flight/info');
   }
   getAirportFlights(iata: String) {
     return this.http.get<String[]>(`${this.uri}/airport/` + iata + '/flight');
