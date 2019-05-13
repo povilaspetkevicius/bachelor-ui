@@ -30,18 +30,20 @@
     </mat-select>
   </mat-form-field>
 </div>
-<div *ngIf="selectedFlight && selectedAirport">
-  <flights-info [flightNumber]="selectedFlight"></flights-info>
-</div>
-<h2 *ngIf="selectedDate">selected: {{ selectedDate }}</h2>
+
 <button mat-raised-button (click)="retrieveDataBasedOnSelectedItem()"
   *ngIf="(selectedAirport || selectedFlight) && !dataFound" color="primary">Find
   data</button>
 <button mat-raised-button (click)="reset()" *ngIf="dataFound || (selectedAirport || selectedFlight)"
   color="primary">Reset data</button>
+<div *ngIf="selectedFlight && selectedAirport">
+  <flights-info [flightNumber]="selectedFlight"></flights-info>
+</div>
 <div id="analysis" *ngIf="dataFound">
+
   <div *ngIf="selectedFlight">
-    <table mat-table [dataSource]="dataSource">
+    <h4>Records in database for flights with flight no. {{ selectedFlight }}</h4>
+    <table mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="flightNumber">
         <th mat-header-cell *matHeaderCellDef> Flight number </th>
         <td mat-cell *matCellDef="let element">{{ element.flightNumber }}</td>
@@ -51,7 +53,7 @@
         <td mat-cell *matCellDef="let element">{{ element.airport }}</td>
       </ng-container>
       <ng-container matColumnDef="date">
-        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
         <td mat-cell *matCellDef="let element">{{ element.date }}</td>
       </ng-container>
       <ng-container matColumnDef="scheduledTime">
@@ -59,11 +61,11 @@
         <td mat-cell *matCellDef="let element">{{ element.scheduleTime }}</td>
       </ng-container>
       <ng-container matColumnDef="expectedTime">
-        <th mat-header-cell *matHeaderCellDef> Expected time </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Expected time </th>
         <td mat-cell *matCellDef="let element">{{ element.expectedTime }}</td>
       </ng-container>
       <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef> Status </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
         <td mat-cell *matCellDef="let element">{{ element.status }}</td>
       </ng-container>
 
@@ -95,13 +97,23 @@
     </canvas>
   </div>
   <div style="display: block;" *ngIf="dataFound">
-    <flights-pair *ngIf="isDisplayLinkedFlights" [flightPairs]="flightStatistics.linkedFlights"></flights-pair>
-    <div *ngIf="!isDisplayLinkedFlights">
-      <h4 *ngIf="selectedFlight" class="status-chart-head">No significant correlation found with other flights with
-        flight no. {{selectedFlight}}</h4>
-    </div>
+    <mat-grid-list cols="1" rowHeight="3:1">
+      <mat-grid-tile
+        *ngIf="this.flightStatistics && this.flightStatistics.linkedFlights && this.flightStatistics.linkedFlights.length > 0">
+        <label style="padding: 1rem">Pairs of flights, which flight no. {{ this.selectedFlight}}, has the largest correlation coefficient</label>
+        <flights-pair [flightPairs]="flightStatistics.linkedFlights"></flights-pair>
+      </mat-grid-tile>
+      <mat-grid-tile
+        *ngIf="!(this.flightStatistics && this.flightStatistics.linkedFlights && this.flightStatistics.linkedFlights.length > 0)">
+        <div>
+          <h4 *ngIf="selectedFlight" class="status-chart-head">No significant correlation found with other flights with
+            flight no. {{selectedFlight}}</h4>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
   </div>
-  <div style="display: block; padding-top: 3rem;" *ngIf="airportStatistics && airportStatistics.grouped_statistics && !selectedFlight">
+  <div style="display: block; padding-top: 3rem;"
+    *ngIf="airportStatistics && airportStatistics.grouped_statistics && !selectedFlight">
     <mat-grid-list cols="1" rowHeight="3:1">
       <mat-grid-tile>
         <label>Pairs of flights, which has the largest covariance coefficient</label>

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, OnChanges, SimpleChanges } from '@angular/core';
-import { MatPaginator, MatTableDataSource, Sort } from '@angular/material';
+import { MatPaginator, MatTableDataSource, Sort, MatSort } from '@angular/material';
 import { Flight } from './flight-data';
 import { BackendApiService } from '../service/backend-api.service'
 import { Status } from './status.interface';
@@ -44,6 +44,7 @@ export class FlightsComponent implements OnInit, AfterViewInit {
   pieChartLegend = true;
   pieChartPlugins = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private _apiService: BackendApiService) {
     monkeyPatchChartJsTooltip();
@@ -55,9 +56,11 @@ export class FlightsComponent implements OnInit, AfterViewInit {
     this.getAirports();
     this.getDates();
     this.dataSource = new MatTableDataSource(this.flights);
+    
   }
   ngAfterViewInit() {
     this.attachPaginator();
+    this.dataSource.sort = this.sort;
   }
 
   checkForChanges(): void {
@@ -100,7 +103,6 @@ export class FlightsComponent implements OnInit, AfterViewInit {
   retrieveDataBasedOnSelectedItem(): void {
     this.dataFound = false;
     if (this.flights.length > 0) this.flights = [];
-    // if (this.simpleStats && this.simpleStats.length > 0) this.simpleStats = [];
     let date = this.selectedDate ? this.selectedDate : new Date().toISOString().slice(0, 10).replace(/-/g, '');
     if (this.selectedFlight || this.selectedAirport) {
       if (this.selectedFlight) {
@@ -178,12 +180,12 @@ export class FlightsComponent implements OnInit, AfterViewInit {
   parseFlightStatistics(stats: any): FlightStatistics {
     console.log(this.simpleStats);
     this.simpleStats = [
-      { unit: "Average of records for disruption-indicating statuses to all statuses per day (%) for selected flight", value: stats.disruptionAvg },
-      { unit: "Standart deviation for disruption-indicating statuses to all statuses during days recorded (%) for selected flight", value: stats.disruptionStdDeviation }
+      { unit: "Average of ratio array for disruption-indicating statuses to all statuses per day (%) for selected flight", value: stats.disruptionAvg },
+      { unit: "Standart deviation for ratio array containing ratios of disruption-indicating statuses to all statuses during days recorded (%) for selected flight", value: stats.disruptionStdDeviation }
     ];
     if (this.selectedDate && this.selectedDate.length > 0) {
-      this.simpleStats.push({ unit: "Average of records for disruption-indicating statuses to all statuses per selected day (%) selected flight", value: stats.disruptionAvg });
-      this.simpleStats.push({ unit: "Standart deviation for disruption-indicating statuses to all statuses during selected day(%) selected flight", value: stats.disruptionStdDeviation });
+      this.simpleStats.push({ unit: "Average of ratio for disruption-indicating statuses to all statuses per selected day (%) selected flight", value: stats.disruptionAvg });
+      this.simpleStats.push({ unit: "Standart deviation for ratio array containing ratios of disruption-indicating statuses to all statuses during selected day(%) selected flight", value: stats.disruptionStdDeviation });
     }
     return {
       disruptionAvg: stats.disruptionAvg,
@@ -198,8 +200,8 @@ export class FlightsComponent implements OnInit, AfterViewInit {
   parseAirportStatistics(stats: any): AirportStatistics {
     console.log(this.simpleStats);
     this.simpleStats = [
-      { unit: "Average of records for disruption-indicating statuses to all statuses per day (%) for selected airport", value: stats.airportMean * 100 },
-      { unit: "Standart deviation for disruption-indicating statuses to all statuses during days recorded (%) for selected airport", value: stats.airportStandartDeviation * 100 }
+      { unit: "Average of ratio for disruption-indicating statuses to all statuses per day (%) for selected airport", value: stats.airportMean * 100 },
+      { unit: "Standart deviation for ratio array of disruption-indicating statuses to all statuses during days recorded (%) for selected airport", value: stats.airportStandartDeviation * 100 }
     ];
     if (this.selectedDate && this.selectedDate.length > 0) {
       this.simpleStats.push({ unit: "Average of records for disruption-indicating statuses to all statuses per selected day (%) for selected airport", value: stats.airportByDate * 100 });
