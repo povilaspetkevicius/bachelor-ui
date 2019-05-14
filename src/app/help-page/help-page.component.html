@@ -1,3 +1,77 @@
+<h2>
+  Description of statistics.
+</h2>
+<br>
 <p>
-  Description of statistics. Soon to be updated.
+  Different data can be seen in the user interface, depending on the selected query parameters. Currently, the user of
+  the interface has a limited option to form requests (can choose between airport data, flights and dates), but the data
+  collected by this system is not large and does not interlink to an extend that would require extensive filtering and
+  search mechanisms. The data can be obtained using three parameters that can be selected from the list. Depending on
+  the parameters selected, the user can see different views, for example, if one of the available airports is selected,
+  the user will see the percentage of all day-to-day flight recordings of flights with a disturbance indicator. The same
+  table will also show the standard deviation of the daily average of all recorded flight recordings to flights that
+  have a disturbance indicator from the set that contains the relationship between today and the day length of the
+  entire experiment flights recorded during that day and having a flight interruption indicator when the airport of
+  arrival or departure is the airport of choice. This size tells us whether interference at the airport is stable, for
+  example, X percent of all scheduled flights are interrupted daily at the airport, and the standard deviation from X is
+  only a tenth part of X, or indicates that the disruption occurs chaotically, for example at the airport every day By
+  disrupting X percent of all scheduled flights and standard deviation close to X, we can say that disruptions occur
+  very rarely or in case of disruption of the airport, planned but affected by disruptions airport flights and flight
+  disruption, flight share is sharply increased. Also, by selecting one of the dates on which flights were registered,
+  we can see scheduled but disrupted flights, whose records exist in the database and have a date attribute equal to one
+  selected in the interface, and all scheduled flights with entries in the database and date and time airport attributes
+  to the levels selected by the user interface.
+</p>
+<img class="picture-class" src="assets/firstPic.png">
+<p>In the same window where the airport information is displayed, you can also see the last 180 statuses that are taken
+  from the database with the last 180 entries with the airport of arrival or departure being equal to the airport
+  selected in the parameters. The statuses are grouped by values and presented in a circular diagram. When one hovers
+  the computer mouse on one of the parts of the chart, you can see the number that is obtained by grouping the statuses.
+  By clicking on one or more data labels in the chart legend, you can choose which statuses one wants to see in the
+  chart, while updating the chart.
+</p>
+<img class="picture-class" src="assets/secondPic.png">
+<p>
+  Finally, in a window showing information about flight statistics, we can see four similar but different tables for a
+  particular airport. Each has ten pairs of unique unique flights (with unique flight numbers), the weakest or most
+  correlated pairs, and ten pairs with the highest or lowest covariance coefficient. From the size of the covariance
+  coefficient, we can determine if the pair changes to a unique set of flight disturbance relationships, the other pair
+  is more inclined to change or change. The correlation coefficient of flight pairs tells us how many sets of other
+  flight recordings are also inclined to change with one pair of flight recordings. To put it simply, knowing that
+  flights are highly correlated or has a high covariation coefficient, one can guess whether another one member of the
+  pair relationship per day will affect the relationship of the other pair member. It is also possible to use these
+  tables to decide which flight pairs at the airport are very related, and this conclusion can serve to prepare flight
+  schedules for new seasons (separating flights from one another, changing one flight time), buying tickets for flights
+  in the near future. (in case of a high positive correlation or covariance coefficient, it is worth considering whether
+  the purchase would be futile.).
+</p>
+<img class="picture-class" src="assets/thirdPic.png">
+<p>
+
+  When selecting an airport in the flight monitoring component, there is also a list of flights that that airport
+  operates. If one of the flights is selected, information on the cities of arrival and departure of the flight, the
+  airport codes for the airline is displayed below.
+</p>
+<img class="picture-class" src="assets/fourthPic.png">
+<p>
+  By clicking on the "Find data" button below, we will see a table showing all records registered in the database with
+  the flight number matched to the selected interface. Records are provided on pages where one page can contain as many
+  flights as the user wants to see. You can also see the number in the bottom right corner of the insertions about
+  flight with selected flight number in the database. You can sort the Date, Expected Time, and Status columns. These
+  data can be used to see whether day-to-day flights with certain statuses change their estimated arrival or departure
+  times, as flight status changes, what records exist in the database for a given day, and perform similar observations.
+</p>
+<img class="picture-class" src="assets/fifthPic.png">
+<p>
+  In the same way as in the airport data box, we can see a circular chart showing the last hundred positions taken from
+  the database for the last 100 entries (or all existing records with less than one hundred) that have a flight number.
+  equal to the flight number selected at the interface. Finally, there is a graph showing 10 pairs of flights where one
+  of the pair members is the size selected at the interface with the highest correlation coefficient. It looks identical
+  to the tables displayed in the airport information window. This chart shows how the flight performance status
+  determines or determines the success or failure of another flight. In reality, this would mean that the flight usually
+  does not happen in a sequence of events where other flights with numbers in the pair are likely to fail. Usually such
+  flights are in the early morning, western flights, but occasionally such chains can also occur throughout the day,
+  such as pilot strikes. The user interface also displays a home window that provides a brief description of the system
+  and its capabilities, a help page that provides information on how to use and interpret the data received in the
+  flight tracking window.
 </p>

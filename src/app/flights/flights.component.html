@@ -92,6 +92,8 @@
   <div style="display: block;" *ngIf="dataFound">
     <h4 *ngIf="selectedFlight" class="status-chart-head">Distribution of status in 100 most up-to-date recorded flights
       with flight no. {{selectedFlight}}</h4>
+    <h4 *ngIf="!selectedFlight" class="status-chart-head">Distribution of status in 180 most up-to-date recorded flights
+      for airport {{selectedAirport}}</h4>
     <canvas baseChart [data]="statusChartData" [labels]="statusChartLabels" [chartType]="pieChartType"
       [options]="pieChartOptions" [plugins]="pieChartPlugins" [legend]="pieChartLegend" [colors]="statusChartColors">
     </canvas>
@@ -100,7 +102,8 @@
     <mat-grid-list cols="1" rowHeight="3:1">
       <mat-grid-tile
         *ngIf="this.flightStatistics && this.flightStatistics.linkedFlights && this.flightStatistics.linkedFlights.length > 0">
-        <label style="padding: 1rem">Pairs of flights, which flight no. {{ this.selectedFlight}}, has the largest correlation coefficient</label>
+        <label style="padding: 1rem">Pairs of flights, which flight no. {{ this.selectedFlight}}, has the largest
+          correlation coefficient</label>
         <flights-pair [flightPairs]="flightStatistics.linkedFlights"></flights-pair>
       </mat-grid-tile>
       <mat-grid-tile
