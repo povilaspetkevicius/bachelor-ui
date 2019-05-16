@@ -5,13 +5,11 @@ import { Observable } from 'rxjs';
 import { Flight } from '../flights/flight-data';
 import { FlightInfo } from '../flights/flights-info/flight-info.interface';
 
-
-
 @Injectable({
   providedIn: 'root'
 })
 export class BackendApiService {
-  uri = 'http://localhost:3000/api';
+  uri = 'api';
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
